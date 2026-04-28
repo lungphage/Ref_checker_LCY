@@ -14,6 +14,7 @@ if (-not (Test-Path $repoPath)) {
 }
 
 Copy-Item (Join-Path $workspace ".gitignore") (Join-Path $repoPath ".gitignore") -Force
+Copy-Item (Join-Path $workspace "README.md") (Join-Path $repoPath "README.md") -Force
 Copy-Item (Join-Path $workspace "build_single_file.cmd") (Join-Path $repoPath "build_single_file.cmd") -Force
 Copy-Item $MyInvocation.MyCommand.Path (Join-Path $repoPath "push_to_github.ps1") -Force
 
