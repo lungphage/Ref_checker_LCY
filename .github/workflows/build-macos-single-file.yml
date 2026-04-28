@@ -1,0 +1,53 @@
+name: Build macOS Single File
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "ref_checker_windows_v5/ref_checker_gui.py"
+      - "ref_checker_windows_v5/build_macos_onefile.sh"
+      - ".github/workflows/build-macos-single-file.yml"
+
+jobs:
+  build-macos-onefile:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        working-directory: ref_checker_windows_v5
+        run: |
+          python -m pip install --upgrade pip wheel setuptools pyinstaller pyinstaller-hooks-contrib
+
+      - name: Build macOS onefile executable
+        working-directory: ref_checker_windows_v5
+        run: |
+          chmod +x build_macos_onefile.sh
+          ./build_macos_onefile.sh
+
+      - name: Prepare artifact package
+        working-directory: ref_checker_windows_v5
+        run: |
+          mkdir -p macos_artifacts
+          cp dist/ReferenceChecker macos_artifacts/ReferenceChecker
+          ditto -c -k --sequesterRsrc --keepParent dist/ReferenceChecker.app macos_artifacts/ReferenceChecker.app.zip
+          cp README_使用说明.txt macos_artifacts/README_使用说明.txt
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReferenceChecker-macos-onefile
+          path: |
+            ref_checker_windows_v5/macos_artifacts/ReferenceChecker
+            ref_checker_windows_v5/macos_artifacts/ReferenceChecker.app.zip
+            ref_checker_windows_v5/macos_artifacts/README_使用说明.txt
+          retention-days: 14

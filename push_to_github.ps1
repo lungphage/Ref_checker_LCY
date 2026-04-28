@@ -18,6 +18,14 @@ Copy-Item (Join-Path $workspace "README.md") (Join-Path $repoPath "README.md") -
 Copy-Item (Join-Path $workspace "build_single_file.cmd") (Join-Path $repoPath "build_single_file.cmd") -Force
 Copy-Item $MyInvocation.MyCommand.Path (Join-Path $repoPath "push_to_github.ps1") -Force
 
+$githubDir = Join-Path $workspace ".github"
+if (Test-Path $githubDir) {
+    robocopy $githubDir (Join-Path $repoPath ".github") /E | Out-Null
+    if ($LASTEXITCODE -gt 7) {
+        throw "robocopy for .github failed with exit code $LASTEXITCODE"
+    }
+}
+
 robocopy (Join-Path $workspace "ref_checker_windows_v5") (Join-Path $repoPath "ref_checker_windows_v5") /E /XD build dist dist_single __pycache__ /XF python-3.13.13-amd64.exe debug_log.txt | Out-Null
 if ($LASTEXITCODE -gt 7) {
     throw "robocopy for ref_checker_windows_v5 failed with exit code $LASTEXITCODE"

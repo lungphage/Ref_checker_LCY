@@ -133,6 +133,63 @@
   `%LOCALAPPDATA%\ReferenceCheckerSingleFile\...`
 - 然后启动真正的主程序
 
+## 生成 macOS 单文件版
+
+### 方案 1：GitHub Actions 自动构建
+
+仓库已经包含工作流：
+
+`/.github/workflows/build-macos-single-file.yml`
+
+它会在 GitHub 的 macOS runner 上：
+
+1. 安装 Python 3.13
+2. 安装 PyInstaller
+3. 构建 macOS `--onefile` 版本
+4. 上传构建产物
+
+触发方式：
+
+- 向 `main` 分支推送与 macOS 构建相关的文件更新
+- 或在 GitHub 仓库的 `Actions` 页面手动运行 `Build macOS Single File`
+
+产物位置：
+
+- GitHub 仓库 `Actions` 页面
+- 对应 workflow run 的 `Artifacts` 区域
+
+产物内容包括：
+
+- `ReferenceChecker`
+  macOS 单文件可执行文件
+- `ReferenceChecker.app.zip`
+  macOS app bundle 压缩包
+- `README_使用说明.txt`
+
+### 方案 2：在 Mac 本机本地构建
+
+进入：
+
+`ref_checker_windows_v5/`
+
+运行：
+
+```bash
+chmod +x build_macos_onefile.sh
+./build_macos_onefile.sh
+```
+
+输出位置：
+
+- `dist/ReferenceChecker`
+- `dist/ReferenceChecker.app`
+
+说明：
+
+- `PyInstaller` 官方建议不同操作系统分别在对应平台上构建
+- 也就是说，macOS 版本应当在 macOS 环境中构建，而不是在 Windows 上交叉打包
+- GitHub Actions 里的 macOS runner 正是为此准备的
+
 ## 推荐 Python 版本
 
 建议使用稳定版：
