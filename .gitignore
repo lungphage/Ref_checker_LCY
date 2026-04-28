@@ -1,0 +1,16 @@
+_remote_repo_check/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+ref_checker_windows_v5/build/
+ref_checker_windows_v5/dist/
+ref_checker_windows_v5/dist_single/
+ref_checker_windows_v5/__pycache__/
+ref_checker_windows_v5/python-3.13.13-amd64.exe
+ref_checker_windows_v5/debug_log.txt
+
+single_file_builder/bin/
+single_file_builder/obj/
+single_file_builder/payload.zip
